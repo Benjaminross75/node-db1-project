@@ -22,7 +22,7 @@ router.post('/', middleWare.checkAccountNameUnique,
   async (req, res, next) => {
   try{
      const newPost = await Account.create(req.body)
-     res.json(newPost)
+     res.status(201).json(newPost)
   } catch(err){
     next(err)
   }
@@ -39,9 +39,10 @@ middleWare.checkAccountPayload,
   }
 });
 
-router.delete('/:id',middleWare.checkAccountId, (req, res, next) => {
+router.delete('/:id',middleWare.checkAccountId, async (req, res, next) => {
   try{
-      res.json('delete account')
+    const deleted = await Account.deleteById(req.params.id)
+      res.json(deleted)
   } catch(err){
     next(err)
   }
