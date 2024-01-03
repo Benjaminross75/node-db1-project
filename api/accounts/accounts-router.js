@@ -41,8 +41,8 @@ middleWare.checkAccountPayload,
 
 router.delete('/:id',middleWare.checkAccountId, async (req, res, next) => {
   try{
-    const deleted = await Account.deleteById(req.params.id)
-      res.json(deleted)
+    await Account.deleteById(req.params.id)
+      res.json(req.account)
   } catch(err){
     next(err)
   }
