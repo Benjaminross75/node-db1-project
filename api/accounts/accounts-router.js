@@ -29,11 +29,12 @@ router.post('/', middleWare.checkAccountNameUnique,
 })
 
 router.put('/:id', middleWare.checkAccountId,
-middleWare.checkAccountNameUnique,
+
 middleWare.checkAccountPayload,
- (req, res, next) => {
+ async (req, res, next) => {
   try{
-      res.json('change account')
+    const updated = await Account.updateById(req.params.id, req.body)
+      res.json(updated)
   } catch(err){
       next(err)
   }
