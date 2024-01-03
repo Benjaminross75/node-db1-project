@@ -12,13 +12,8 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id',middleWare.checkAccountId, async (req, res, next) => {
-  try{
-    const account = await Account.getById(req.params.id)
-     res.json(account)
-  } catch(err){
-     next(err)
-  }
+router.get('/:id',middleWare.checkAccountId, (req, res, next) => {
+res.json(req.account)
 
 })
 

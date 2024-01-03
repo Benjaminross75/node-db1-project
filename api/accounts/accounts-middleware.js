@@ -1,9 +1,15 @@
+const Account = require('./accounts-model')
+
+
 exports.checkAccountPayload = (req, res, next) => {
-  // DO YOUR MAGIC
- console.log('check payload')
-  // Ndote: you can either write "manual" validation logic
-  // or use the Yup library (not currently installed)
-  next()
+const {name, budget} = req.body
+if(name === undefined || budget === undefined){
+  res.status(400).json({message: "name and budget are required"})
+} else if(typeof name !== "string"){
+  res.status(400).json({message: "must be a string"})
+} else if(name.trim().length < 3 || name.trim().length > 100){
+  res.status(400).json({message: "name of account must be between 3 and 100"})
+}
 }
 
 exports.checkAccountNameUnique = (req, res, next) => {
@@ -12,8 +18,16 @@ exports.checkAccountNameUnique = (req, res, next) => {
   next()
 }
 
-exports.checkAccountId = (req, res, next) => {
-  // DO YOUR MAGIC
-  console.log('check id')
-  next()
+exports.checkAccountId = async (req, res, next) => {
+ try{
+  const account = await Account.getById(req.params.id)
+  if(!account){
+    next({status: 404, message: "account not found"})
+  } else{
+    req.account = account
+    next()
+  }
+ } catch(err){
+  next(err)
+ }
 }
